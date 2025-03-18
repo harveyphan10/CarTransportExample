@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.PriorityQueue;
+import java.util.Arrays;
 
 /**
  * @author dungptm2
@@ -36,11 +36,8 @@ public class CarTransport {
             }
         }
 
-        // create max heap based on the seat remaining
-        PriorityQueue<int[]> q = new PriorityQueue<int[]>((o1, o2) -> o2[0] - o1[0]);
-        for (int i = 0; i < n; i++) {
-            q.offer(new int[] {seats[i] - people[i], i});
-        }
+        // Sort seats in ascending order
+        Arrays.sort(seats);
 
         // count total people
         int totalPeople = 0;
@@ -48,13 +45,11 @@ public class CarTransport {
             totalPeople += e;
         }
 
-        // prioritizes cars with the most remaining seats after placing their corresponding group
+        // Fill people into the cars with the most seats first.
         int totalCar = 0;
-        while (!q.isEmpty() && totalPeople > 0) {
-            int[] poll = q.poll();
-            int index = poll[1];
+        for (int i = seats.length - 1; i >= 0 && totalPeople > 0; i--) {
+            totalPeople -= seats[i];
             totalCar++;
-            totalPeople -= seats[index];
         }
         return totalCar;
     }
